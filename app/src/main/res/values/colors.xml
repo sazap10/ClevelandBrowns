@@ -3,4 +3,37 @@
     <item name="primary" type="color">#f26522</item>
     <item name="primary_dark" type="color">#b43c00</item>
     <item name="accent" type="color">#311700</item>
+
+    <item name="arizona_cardinals" type="color">#97233F</item>
+    <item name="atlanta_falcons" type="color">#A71930</item>
+    <item name="baltimore_ravens" type="color">#241773</item>
+    <item name="buffalo_bills" type="color">#00338d</item>
+    <item name="carolina_panthers" type="color">#000</item>
+    <item name="chicago_bears" type="color">#0B162A</item>
+    <item name="cincinnati_bengals" type="color">#FB4F14</item>
+    <item name="cleveland_browns" type="color">#22150C</item>
+    <item name="dallas_cowboys" type="color">#002244</item>
+    <item name="denver_broncos" type="color">#fb4f14</item>
+    <item name="detroit_lions" type="color">#005A8B</item>
+    <item name="green_bay_packers" type="color">#203731</item>
+    <item name="houston_texans" type="color">#03202F</item>
+    <item name="indianapolis_colts" type="color">#002C5F</item>
+    <item name="jacksonville_jaguars" type="color">#000</item>
+    <item name="kansas_city_chiefs" type="color">#E31837</item>
+    <item name="miami_dolphins" type="color">#008E97</item>
+    <item name="minnesota_vikings" type="color">#4F2683</item>
+    <item name="new_england_patriots" type="color">#002244</item>
+    <item name="new_orleans_saints" type="color">#000</item>
+    <item name="new_york_giants" type="color">#0B2265</item>
+    <item name="new_york_jets" type="color">#203731</item>
+    <item name="oakland_raiders" type="color">#A5ACAF</item>
+    <item name="philadelphia_eagles" type="color">#004953</item>
+    <item name="pittsburgh_steelers" type="color">#000</item>
+    <item name="san_diego_chargers" type="color">#002244</item>
+    <item name="san_francisco_49ers" type="color">#AA0000</item>
+    <item name="seattle_seahawks" type="color">#002244</item>
+    <item name="st_louis_rams" type="color">#002244</item>
+    <item name="tampa_bay_buccaneers" type="color">#D50A0A</item>
+    <item name="tennessee_titans" type="color">#4B92DB</item>
+    <item name="washington_redskins" type="color">#773141</item>
 </resources>

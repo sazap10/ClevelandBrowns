@@ -1,10 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.sachinpan.clevelandbrowns.FixturesFragment">
+    tools:context="de.sachinpan.clevelandbrowns.FixturesFragment"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="FIXTURES" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:id="@+id/week_title"
+        android:background="@color/accent"
+        android:textColor="#ffffffff"
+        android:singleLine="true"
+        android:padding="4dp" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fixtures_list_view"
+        android:layout_gravity="center" />
+
+
+</LinearLayout>
