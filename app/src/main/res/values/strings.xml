@@ -4,7 +4,6 @@
     <string name="app_name">Cleveland Browns</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
     <string-array name="nav_drawer_items">
@@ -14,6 +13,108 @@
         <item>Team</item>
     </string-array>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="team_place_names">
+        <item>Arizona</item>
+        <item>Atlanta</item>
+        <item>Baltimore</item>
+        <item>Buffalo</item>
+        <item>Carolina</item>
+        <item>Chicago</item>
+        <item>Cincinnati</item>
+        <item>Cleveland</item>
+        <item>Dallas</item>
+        <item>Denver</item>
+        <item>Detroit</item>
+        <item>Green Bay</item>
+        <item>Houston</item>
+        <item>Indianapolis</item>
+        <item>Jacksonville</item>
+        <item>Kansas City</item>
+        <item>Miami</item>
+        <item>Minnesota</item>
+        <item>New England</item>
+        <item>New Orleans</item>
+        <item>New York</item>
+        <item>New York</item>
+        <item>Oakland</item>
+        <item>Philadelphia</item>
+        <item>Pittsburgh</item>
+        <item>San Diego</item>
+        <item>San Francisco</item>
+        <item>Seattle</item>
+        <item>St Louis</item>
+        <item>Tampa Bay</item>
+        <item>Tennessee</item>
+        <item>Washington</item>
+    </string-array>
 
+    <string-array name="team_nicknames">
+        <item>Cardinals</item>
+        <item>Falcons</item>
+        <item>Ravens</item>
+        <item>Bills</item>
+        <item>Panthers</item>
+        <item>Bears</item>
+        <item>Bengals</item>
+        <item>Browns</item>
+        <item>Cowboys</item>
+        <item>Broncos</item>
+        <item>Lions</item>
+        <item>Packers</item>
+        <item>Texans</item>
+        <item>Colts</item>
+        <item>Jaguars</item>
+        <item>Chiefs</item>
+        <item>Dolphins</item>
+        <item>Vikings</item>
+        <item>Patriots</item>
+        <item>Saints</item>
+        <item>Giants</item>
+        <item>Jets</item>
+        <item>Raiders</item>
+        <item>Eagles</item>
+        <item>Steelers</item>
+        <item>Chargers</item>
+        <item>49ers</item>
+        <item>Seahawks</item>
+        <item>Rams</item>
+        <item>Buccaneers</item>
+        <item>Titans</item>
+        <item>Redskins</item>
+    </string-array>
+
+    <string-array name="team_resource_string">
+        <item>arizona_cardinals</item>
+        <item>atlanta_falcons</item>
+        <item>baltimore_ravens</item>
+        <item>buffalo_bills</item>
+        <item>carolina_panthers</item>
+        <item>chicago_bears</item>
+        <item>cincinnati_bengals</item>
+        <item>cleveland_browns</item>
+        <item>dallas_cowboys</item>
+        <item>denver_broncos</item>
+        <item>detroit_lions</item>
+        <item>green_bay_packers</item>
+        <item>houston_texans</item>
+        <item>indianapolis_colts</item>
+        <item>jacksonville_jaguars</item>
+        <item>kansas_city_chiefs</item>
+        <item>miami_dolphins</item>
+        <item>minnesota_vikings</item>
+        <item>new_england_patriots</item>
+        <item>new_orleans_saints</item>
+        <item>new_york_giants</item>
+        <item>new_york_jets</item>
+        <item>oakland_raiders</item>
+        <item>philadelphia_eagles</item>
+        <item>pittsburgh_steelers</item>
+        <item>san_diego_chargers</item>
+        <item>san_francisco_49ers</item>
+        <item>seattle_seahawks</item>
+        <item>st_louis_rams</item>
+        <item>tampa_bay_buccaneers</item>
+        <item>tennessee_titans</item>
+        <item>washington_redskins</item>
+    </string-array>
 </resources>
