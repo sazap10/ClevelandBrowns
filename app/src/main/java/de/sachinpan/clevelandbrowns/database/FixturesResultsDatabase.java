@@ -56,7 +56,7 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
 
     /**
      * Takes a single <code>FixtureResult</code> and adds it to the database.
-     *
+     * If the fixture already exists then it replaces the found record.
      * @param item The FixtureResult to insert.
      * @return If the insert was successful.
      */
@@ -85,6 +85,11 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return success;
     }
 
+    /**
+     * Gets the next game for the specified team.
+     * @param teamName team to retrieve the next game for.
+     * @return The object containing the fixture.
+     */
     private FixtureResult getNextGame(String teamName) {
         SQLiteDatabase db = this.getReadableDatabase();
         String where = COLUMN_DATE + " > ? AND ( " + MATCH_TEAM + ")";
@@ -100,6 +105,11 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return fixture;
     }
 
+    /**
+     *
+     * @param teamName
+     * @return
+     */
     private List<FixtureResult> getLastTwoGames(String teamName) {
         List<FixtureResult> lastTwoGames = new ArrayList<FixtureResult>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -118,6 +128,12 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return lastTwoGames;
     }
 
+    /**
+     *
+     * @param teamName
+     * @return
+     * @throws FixturesNotFoundException
+     */
     public List<FixtureResult> getHomeHeaderGames(String teamName) throws FixturesNotFoundException {
         List<FixtureResult> lastTwoGames = getLastTwoGames(teamName);
         if (lastTwoGames.isEmpty() || lastTwoGames.size() != 2) {
@@ -132,6 +148,12 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return lastTwoGames;
     }
 
+    /**
+     *
+     * @param teamName
+     * @param isResult
+     * @return
+     */
     public List<FixtureResult> getFixturesResultsForTeam(String teamName, boolean isResult){
         List<FixtureResult> fixtureList = new ArrayList<FixtureResult>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -150,6 +172,11 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return fixtureList;
     }
 
+    /**
+     *
+     * @param isResult
+     * @return
+     */
     public List<FixtureResult> getFixturesForAll(boolean isResult){
         List<FixtureResult> fixtureList = new ArrayList<FixtureResult>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -168,6 +195,11 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return fixtureList;
     }
 
+    /**
+     *
+     * @param cursor
+     * @return
+     */
     private FixtureResult cursorToFixture(Cursor cursor) {
         FixtureResult fixture = new FixtureResult();
         fixture.setDate(FixtureResult.epochToDateString(cursor.getLong(1)));
@@ -182,6 +214,11 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return fixture;
     }
 
+    /**
+     *
+     * @param fixture
+     * @return
+     */
     public int containsFixture(FixtureResult fixture) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selection = COLUMN_DATE + " = ? AND "+COLUMN_HOME_TEAM + " = ? AND " + COLUMN_AWAY_TEAM + " = ?";
@@ -196,111 +233,4 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         db.close();
         return id;
     }
-
-//    public boolean containsStory(String title) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor res = db.rawQuery("SELECT * FROM Media WHERE Title = '" + title.replace("'", "[apos]") + "'", null);
-//        boolean contained = res.getCount() > 0;
-//        res.close();
-//        db.close();
-//        return contained;
-//    }
-//
-//    public boolean deleteStory(String title) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        boolean success = (db.delete("Media", "Title = ? ", new String[]{title}) != 0);
-//        db.close();
-//        return success;
-//    }
-//
-//    /**
-//     * Deletes a number of old entries from the database
-//     *
-//     * @param count The number of stories to delete.
-//     */
-//    public void deleteOldStories(int count) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        SQLiteDatabase dbw = this.getWritableDatabase();
-//        Cursor res = db.rawQuery("SELECT * FROM Media", null);
-//        res.moveToFirst();
-//        List<String> titles = new ArrayList<String>();
-//        List<String> imgs = new ArrayList<String>();
-//        int i = 0;
-//        while (i < count && !res.isAfterLast()) {
-//            titles.add(res.getString(res.getColumnIndex("Title")).replace("[apos]", "'"));
-//
-//            String source = res.getString(res.getColumnIndex("Image"));
-//            if (source != null && !"spadaro".equals(source)) {
-//                imgs.add(res.getString(res.getColumnIndex("Post_ID")));
-//            }
-//
-//            res.moveToNext();
-//            i++;
-//        }
-//
-//        for (String img : imgs) {
-//            FileHandler.deleteFile(img);
-//        }
-//
-//        for (i = 0; i < titles.size(); i++) {
-//            dbw.delete("Media", "Title = ? ", new String[]{titles.get(i)});
-//        }
-//
-//        res.close();
-//        db.close();
-//        dbw.close();
-//    }
-//
-//    public boolean deleteAllStories() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        SQLiteDatabase dbw = this.getWritableDatabase();
-//        Cursor res = db.rawQuery("SELECT * FROM Media", null);
-//        res.moveToFirst();
-//
-//        List<String> imgNames = new ArrayList<String>();
-//        for (int i = 0; i < res.getCount(); i++) {
-//            String source = res.getString(res.getColumnIndex("Image"));
-//            if (source != null && !"spadaro".equals(source)) {
-//                imgNames.add(res.getString(res.getColumnIndex("Post_ID")));
-//            }
-//        }
-//
-//        for (String img : imgNames) {
-//            FileHandler.deleteFile(img);
-//        }
-//
-//        boolean success = (dbw.delete("Media", "1", null) > 0);
-//
-//        res.close();
-//        db.close();
-//        dbw.close();
-//
-//        return success;
-//    }
-//
-//    public NewsItem[] getStories() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor res = db.rawQuery("SELECT * FROM Media", null);
-//        res.moveToLast();
-//
-//        NewsItem[] newsItems = new NewsItem[res.getCount()];
-//        for (int i = 0; i < newsItems.length; i++) {
-//            String id = res.getString(res.getColumnIndex("Post_ID"));
-//            String title = res.getString(res.getColumnIndex("Title")).replace("[apos]", "'");
-//            String link = res.getString(res.getColumnIndex("Link")).replace("[apos]", "'");
-//            String time = res.getString(res.getColumnIndex("Time")).replace("[apos]", "'");
-//            String source = res.getString(res.getColumnIndex("Image"));
-//
-//            Drawable d = null;
-//            d = FileHandler.getDrawableFromFile(source);
-//
-//            newsItems[i] = new NewsItem(link, title, source, time, (short) 0, d);
-//            res.moveToPrevious();
-//        }
-//
-//        res.close();
-//        db.close();
-//
-//        return newsItems;
-//    }
 }
