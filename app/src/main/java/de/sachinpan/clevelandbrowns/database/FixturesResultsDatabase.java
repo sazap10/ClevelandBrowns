@@ -73,8 +73,14 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         if (item.getAwayScore() != null) {
             contentValues.put(COLUMN_AWAY_TEAM_SCORE, item.getAwayScore());
         }
-
-        boolean success = (db.insert(TABLE_FIXTURES_RESULTS, null, contentValues) != -1);
+        int id =containsFixture(item);
+        boolean success;
+        if(id != -1){
+            contentValues.put(COLUMN_ID,id);
+            success = (db.replace(TABLE_FIXTURES_RESULTS, null, contentValues) != -1);
+        }else{
+            success = (db.insert(TABLE_FIXTURES_RESULTS, null, contentValues) != -1);
+        }
         db.close();
         return success;
     }
@@ -126,8 +132,40 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         return lastTwoGames;
     }
 
-    public List<FixtureResult> getFixtures(String teamName){
-        return null;
+    public List<FixtureResult> getFixturesResultsForTeam(String teamName, boolean isResult){
+        List<FixtureResult> fixtureList = new ArrayList<FixtureResult>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String comparator = isResult? "<":">";
+        String where = COLUMN_DATE + " "+ comparator+" ? AND ( " + MATCH_TEAM + ")";
+        String[] selectionArgs = new String[]{String.valueOf(new Date().getTime()), teamName, teamName};
+        String orderBy = COLUMN_DATE + " ASC";
+        Cursor cursor = db.query(TABLE_FIXTURES_RESULTS, null, where, selectionArgs, null, null, orderBy);
+        while (!cursor.isAfterLast()) {
+            FixtureResult fixture = cursorToFixture(cursor);
+            fixtureList.add(fixture);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return fixtureList;
+    }
+
+    public List<FixtureResult> getFixturesForAll(boolean isResult){
+        List<FixtureResult> fixtureList = new ArrayList<FixtureResult>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String comparator = isResult? "<":">";
+        String where = COLUMN_DATE + " " + comparator+" ?";
+        String[] selectionArgs = new String[]{String.valueOf(new Date().getTime())};
+        String orderBy = COLUMN_DATE + " ASC";
+        Cursor cursor = db.query(TABLE_FIXTURES_RESULTS, null, where, selectionArgs, null, null, orderBy);
+        while (!cursor.isAfterLast()) {
+            FixtureResult fixture = cursorToFixture(cursor);
+            fixtureList.add(fixture);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return fixtureList;
     }
 
     private FixtureResult cursorToFixture(Cursor cursor) {
@@ -142,6 +180,21 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
             fixture.setAwayScore(cursor.getInt(5));
         }
         return fixture;
+    }
+
+    public int containsFixture(FixtureResult fixture) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = COLUMN_DATE + " = ? AND "+COLUMN_HOME_TEAM + " = ? AND " + COLUMN_AWAY_TEAM + " = ?";
+        String epoch = String.valueOf(FixtureResult.dateStringToEpoch(fixture.getDate()));
+        String[] selectionArgs = new String[]{epoch, fixture.getHomeTeam(),fixture.getAwayTeam()};
+        Cursor cursor = db.query(TABLE_FIXTURES_RESULTS,null,selection,selectionArgs,null,null,null);
+        int id=-1;
+        if(cursor.moveToNext()){
+            id = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return id;
     }
 
 //    public boolean containsStory(String title) {
