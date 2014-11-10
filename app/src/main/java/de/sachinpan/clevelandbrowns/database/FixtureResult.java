@@ -12,6 +12,15 @@ public class FixtureResult {
     private Integer homeScore;
     private Integer awayScore;
     private String date;
+    private String week;
+
+    public String getWeek() {
+        return week;
+    }
+
+    public void setWeek(String week) {
+        this.week = week;
+    }
 
     public String getHomeTeam() {
         return homeTeam;

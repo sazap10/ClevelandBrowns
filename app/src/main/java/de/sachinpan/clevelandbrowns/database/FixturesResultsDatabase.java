@@ -25,6 +25,7 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_AWAY_TEAM = "AwayTeam";
     private static final String COLUMN_HOME_TEAM_SCORE = "HomeTeamScore";
     private static final String COLUMN_AWAY_TEAM_SCORE = "AwayTeamScore";
+    private static final String COLUMN_WEEK = "WEEK";
 
     private static final String MATCH_TEAM = COLUMN_HOME_TEAM + " = ? OR " + COLUMN_AWAY_TEAM + " = ?";
 
@@ -34,7 +35,8 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
             + " integer primary key autoincrement, " + COLUMN_DATE
             + " integer not null, " + COLUMN_HOME_TEAM + " text not null, "
             + COLUMN_HOME_TEAM_SCORE + " integer null, " + COLUMN_AWAY_TEAM +
-            " text not null, " + COLUMN_AWAY_TEAM_SCORE + " integer null" + ");";
+            " text not null, " + COLUMN_AWAY_TEAM_SCORE + " integer null, " +
+            COLUMN_WEEK + " text not null);";
 
     public FixturesResultsDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -67,13 +69,14 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         contentValues.put(COLUMN_DATE, FixtureResult.dateStringToEpoch(item.getDate()));
         contentValues.put(COLUMN_HOME_TEAM, item.getHomeTeam());
         contentValues.put(COLUMN_AWAY_TEAM, item.getAwayTeam());
+        contentValues.put(COLUMN_WEEK, item.getWeek());
         if (item.getHomeScore() != null) {
             contentValues.put(COLUMN_HOME_TEAM_SCORE, item.getHomeScore());
         }
         if (item.getAwayScore() != null) {
             contentValues.put(COLUMN_AWAY_TEAM_SCORE, item.getAwayScore());
         }
-        int id =containsFixture(item);
+        int id = getFixture(item);
         boolean success;
         if(id != -1){
             contentValues.put(COLUMN_ID,id);
@@ -106,9 +109,9 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param teamName
-     * @return
+     * Gets the previous two games for the specified team.
+     * @param teamName team to retrieve the previous two games for.
+     * @return A list of the previous two results.
      */
     private List<FixtureResult> getLastTwoGames(String teamName) {
         List<FixtureResult> lastTwoGames = new ArrayList<FixtureResult>();
@@ -129,10 +132,10 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param teamName
-     * @return
-     * @throws FixturesNotFoundException
+     * Convenience method for getting the three games required for the home header
+     * @param teamName team to retrieve fixtures fo.
+     * @return A list of 2 previous results and next game.
+     * @throws FixturesNotFoundException if any data is wrong.
      */
     public List<FixtureResult> getHomeHeaderGames(String teamName) throws FixturesNotFoundException {
         List<FixtureResult> lastTwoGames = getLastTwoGames(teamName);
@@ -149,10 +152,10 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param teamName
-     * @param isResult
-     * @return
+     * Gets the fixtures or results for a specified team.
+     * @param teamName Team to retrieve fixtures and results for.
+     * @param isResult Determines what is returned, true if results required
+     * @return A list of fixtures or results for the specified team
      */
     public List<FixtureResult> getFixturesResultsForTeam(String teamName, boolean isResult){
         List<FixtureResult> fixtureList = new ArrayList<FixtureResult>();
@@ -173,9 +176,9 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param isResult
-     * @return
+     * Gets the fixtures or results for all teams.
+     * @param isResult  Determines what is returned, true if results required
+     * @return  A list of fixtures or results for all teams.
      */
     public List<FixtureResult> getFixturesForAll(boolean isResult){
         List<FixtureResult> fixtureList = new ArrayList<FixtureResult>();
@@ -196,9 +199,9 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param cursor
-     * @return
+     * Converts the cursor returned from a query into a FixtureResult object.
+     * @param cursor Cursor to convert
+     * @return Converted FixtureResult
      */
     private FixtureResult cursorToFixture(Cursor cursor) {
         FixtureResult fixture = new FixtureResult();
@@ -211,15 +214,16 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         if (!cursor.isNull(5)) {
             fixture.setAwayScore(cursor.getInt(5));
         }
+        fixture.setWeek(cursor.getString(6));
         return fixture;
     }
 
     /**
-     *
-     * @param fixture
-     * @return
+     * Gets the fixture with the specified values if exists.
+     * @param fixture Fixture to check for.
+     * @return The id of the fixtures, if fixture doesn't exist returns -1.
      */
-    public int containsFixture(FixtureResult fixture) {
+    private int getFixture(FixtureResult fixture) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selection = COLUMN_DATE + " = ? AND "+COLUMN_HOME_TEAM + " = ? AND " + COLUMN_AWAY_TEAM + " = ?";
         String epoch = String.valueOf(FixtureResult.dateStringToEpoch(fixture.getDate()));
