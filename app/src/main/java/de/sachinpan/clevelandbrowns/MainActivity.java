@@ -1,10 +1,10 @@
 package de.sachinpan.clevelandbrowns;
 
 
-import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,8 +16,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+
+import de.sachinpan.clevelandbrowns.database.FixturesParser;
+import io.fabric.sdk.android.Fabric;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "6e7A1VTD0Kv196WS5IwKUsq7B";
+    private static final String TWITTER_SECRET = "wKqkNStv57hVEacUOj6niJLB7h1JTceqjDMVUyeiNCfdY3HbUK";
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -31,6 +42,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+
+        Fabric.with(this, new Twitter(authConfig));
+
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
@@ -79,6 +95,7 @@ public class MainActivity extends ActionBarActivity {
         }
         //set the listener for the drawer press event
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+        new FixturesParser(getApplicationContext()).execute();
     }
 
     /**

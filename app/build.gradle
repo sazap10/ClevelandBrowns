@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/repo' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/repo' }
+}
+
 
 android {
     compileSdkVersion 21
@@ -24,4 +39,12 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile 'org.jsoup:jsoup:1.8.1'
+    compile 'com.mcxiaoke.volley:library:1.0.8'
+    compile 'com.melnykov:floatingactionbutton:1.0.7'
+    compile('com.twitter.sdk.android:twitter:1.0.1@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.0.1@aar') {
+        transitive = true;
+    }
 }

@@ -56,17 +56,29 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+    public void insertFixtures(List<FixtureResult> fixtures){
+        SQLiteDatabase db = this.getWritableDatabase();
+        for(FixtureResult fixture: fixtures){
+            insertFixtureResult( db,  fixture);
+        }
+        db.close();
+    }
+
     /**
      * Takes a single <code>FixtureResult</code> and adds it to the database.
      * If the fixture already exists then it replaces the found record.
      * @param item The FixtureResult to insert.
      * @return If the insert was successful.
      */
-    public boolean insertFixtureResult(FixtureResult item) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public boolean insertFixtureResult( SQLiteDatabase db, FixtureResult item) {
+        boolean getDb = db == null;
+        if(getDb){
+            db = this.getWritableDatabase();
+        }
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(COLUMN_DATE, FixtureResult.dateStringToEpoch(item.getDate()));
+        contentValues.put(COLUMN_DATE, String.valueOf(FixtureResult.dateStringToEpoch(item.getDate())));
         contentValues.put(COLUMN_HOME_TEAM, item.getHomeTeam());
         contentValues.put(COLUMN_AWAY_TEAM, item.getAwayTeam());
         contentValues.put(COLUMN_WEEK, item.getWeek());
@@ -76,7 +88,7 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         if (item.getAwayScore() != null) {
             contentValues.put(COLUMN_AWAY_TEAM_SCORE, item.getAwayScore());
         }
-        int id = getFixture(item);
+        int id = getFixture(db, item);
         boolean success;
         if(id != -1){
             contentValues.put(COLUMN_ID,id);
@@ -84,7 +96,9 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         }else{
             success = (db.insert(TABLE_FIXTURES_RESULTS, null, contentValues) != -1);
         }
-        db.close();
+        if(getDb) {
+            db.close();
+        }
         return success;
     }
 
@@ -165,6 +179,7 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         String[] selectionArgs = new String[]{String.valueOf(new Date().getTime()), teamName, teamName};
         String orderBy = COLUMN_DATE + " ASC";
         Cursor cursor = db.query(TABLE_FIXTURES_RESULTS, null, where, selectionArgs, null, null, orderBy);
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             FixtureResult fixture = cursorToFixture(cursor);
             fixtureList.add(fixture);
@@ -188,6 +203,7 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
         String[] selectionArgs = new String[]{String.valueOf(new Date().getTime())};
         String orderBy = COLUMN_DATE + " ASC";
         Cursor cursor = db.query(TABLE_FIXTURES_RESULTS, null, where, selectionArgs, null, null, orderBy);
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             FixtureResult fixture = cursorToFixture(cursor);
             fixtureList.add(fixture);
@@ -220,21 +236,30 @@ public class FixturesResultsDatabase extends SQLiteOpenHelper {
 
     /**
      * Gets the fixture with the specified values if exists.
-     * @param fixture Fixture to check for.
+     * @param db database to use.
+     * @param fixture FixtureResult to check for.
      * @return The id of the fixtures, if fixture doesn't exist returns -1.
      */
-    private int getFixture(FixtureResult fixture) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    private int getFixture(SQLiteDatabase db, FixtureResult fixture) {
         String selection = COLUMN_DATE + " = ? AND "+COLUMN_HOME_TEAM + " = ? AND " + COLUMN_AWAY_TEAM + " = ?";
         String epoch = String.valueOf(FixtureResult.dateStringToEpoch(fixture.getDate()));
         String[] selectionArgs = new String[]{epoch, fixture.getHomeTeam(),fixture.getAwayTeam()};
         Cursor cursor = db.query(TABLE_FIXTURES_RESULTS,null,selection,selectionArgs,null,null,null);
         int id=-1;
-        if(cursor.moveToNext()){
+        if(cursor.getCount() != 0){
+            cursor.moveToNext();
             id = cursor.getInt(0);
         }
         cursor.close();
-        db.close();
         return id;
+    }
+
+    public boolean deleteAllFixtures() {
+        SQLiteDatabase dbw = this.getWritableDatabase();
+        boolean success = (dbw.delete(TABLE_FIXTURES_RESULTS, "1", null) > 0);
+
+        dbw.close();
+
+        return success;
     }
 }

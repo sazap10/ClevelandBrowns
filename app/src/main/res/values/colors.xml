@@ -3,6 +3,9 @@
     <item name="primary" type="color">#f26522</item>
     <item name="primary_dark" type="color">#b43c00</item>
     <item name="accent" type="color">#311700</item>
+    <item name="twitter_background" type="color">#55ACEE</item>
+    <item name="twitter_pressed" type="color">#00ACEE</item>
+    <item name="twitter_ripple" type="color">#292f33</item>
 
     <item name="arizona_cardinals" type="color">#97233F</item>
     <item name="atlanta_falcons" type="color">#A71930</item>

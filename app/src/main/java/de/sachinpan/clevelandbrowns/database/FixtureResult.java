@@ -64,6 +64,7 @@ public class FixtureResult {
 
     /**
      * Converts the string representation of a date to epoch time for database
+     *
      * @param date string to be converted, example: THU, NOV 6 2014 1:00 PM
      * @return epoch time
      */
@@ -72,8 +73,8 @@ public class FixtureResult {
         try {
             Date parsedDate = formatter.parse(date);
             return parsedDate.getTime();
-        }catch(ParseException e){
-            Log.e("FixtureDateException","Unable to parse date string to date");
+        } catch (ParseException e) {
+            Log.e("FixtureDateException", "Unable to parse date string to date: " + date);
             return 0;
         }
 
@@ -81,12 +82,30 @@ public class FixtureResult {
 
     /**
      * Converts the epoch time long to a String representation
+     *
      * @param epochTime epoch time to be converted
      * @return Date string, example:
      */
-    public static String epochToDateString(long epochTime){
+    public static String epochToDateString(long epochTime) {
         Date epochDate = new Date(epochTime);
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE, d MMMMM yyyy h:mm a");
         return formatter.format(epochDate);
+    }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder("Fixture{[ HomeTeam: ");
+        builder.append(getHomeTeam());
+        builder.append(", Score: ");
+        builder.append(getHomeScore());
+        builder.append("],[ AwayTeam: ");
+        builder.append(getAwayTeam());
+        builder.append(", Score: ");
+        builder.append(getAwayScore());
+        builder.append("], [ Date: ");
+        builder.append(getDate());
+        builder.append("], [ Week ");
+        builder.append(getWeek());
+        builder.append("]}");
+        return builder.toString();
     }
 }
