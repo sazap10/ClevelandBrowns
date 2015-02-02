@@ -1,0 +1,19 @@
+language: android
+jdk: oraclejdk7
+env:
+  matrix:
+    - ANDROID_TARGET=android-21  ANDROID_ABI=armeabi-v7a
+deploy:
+  provider: releases
+  api-key: "e5d7c03c19a733cadc6bca84e4619b4162a8440e"
+  file: "app/build/outputs/apk/app-debug.apk"
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+android:
+  components:
+    - build-tools-21.1.2
+before_install:
+ - chmod +x gradlew
+script: ./gradlew assembleDebug
